@@ -1,0 +1,37 @@
+services:
+  app:
+    image: ghcr.io/ggerganov/llama.cpp:server-cuda
+    volumes:
+      - ./cache:/root/.cache
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              # device_ids: ['1']
+              capabilities: [ gpu ]
+    tty: true
+    stop_grace_period: 0s
+    entrypoint: ''
+    environment:
+      TZ: Asia/Tokyo
+      # --hf-repo mmnga/HODACHI-EZO-Common-9B-gemma-2-it-gguf
+      # --hf-file HODACHI-EZO-Common-9B-gemma-2-it-Q5_K_M.gguf
+      # --hf-repo mmnga/Llama3-ArrowSE-8B-v0.3-gguf
+      # --hf-file Llama3-ArrowSE-8B-v0.3-Q5_K_M.gguf
+      # --hf-repo dahara1/gemma-2-27b-it-gguf-japanese-imatrix
+      # --hf-file gemma-2-27b-it.f16.Q5_k_m.gguf
+      # --hf-repo Aratako/calm3-22b-RP-GGUF
+      # --hf-file calm3-22b-RP-Q4_K_M.gguf
+    command: >
+      /llama-server
+      --host 0.0.0.0
+      --port 8000
+      --hf-repo grapevine-AI/c4ai-command-r-08-2024-gguf
+      --hf-file c4ai-command-r-08-2024-Q4_K_M.gguf
+      --threads 8
+      --n-gpu-layers 99
+      --ctx-size 4096
+      -a gpt-4-o
