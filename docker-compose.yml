@@ -34,4 +34,4 @@ services:
       --threads 8
       --n-gpu-layers 99
       --ctx-size 4096
-      -a gpt-4-o
+      -a gpt-4o-mini
