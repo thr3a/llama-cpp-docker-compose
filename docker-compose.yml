@@ -10,12 +10,14 @@ services:
     entrypoint: ''
     environment:
       TZ: Asia/Tokyo
+      # --hf-repo grapevine-AI/gemma-2-2b-jpn-it-gguf
+      # --hf-file gemma-2-2B-jpn-it-Q8_0.gguf
     command: >
       /llama-server
       --host 0.0.0.0
       --port 8000
-      --hf-repo grapevine-AI/gemma-2-2b-jpn-it-gguf
-      --hf-file gemma-2-2B-jpn-it-Q8_0.gguf
+      --hf-repo alfredplpl/gemma-2-baku-2b-it-gguf
+      --hf-file gemma-2-baku-2b-it-Q8_0.gguf
       --threads 8
-      --ctx-size 4096
+      --ctx-size 8192
       -a gpt-4o-mini
