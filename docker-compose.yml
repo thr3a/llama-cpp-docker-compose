@@ -18,6 +18,6 @@ services:
       --port 8000
       --hf-repo alfredplpl/gemma-2-baku-2b-it-gguf
       --hf-file gemma-2-baku-2b-it-Q8_0.gguf
-      --threads 8
-      --ctx-size 8192
+      --threads 12
+      --ctx-size 4096
       -a gpt-4o-mini
