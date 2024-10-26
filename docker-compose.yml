@@ -31,14 +31,17 @@ services:
       # --hf-file EZO-Qwen2.5-32B-Instruct-Q4_K_M.gguf
       # --hf-repo Aratako/calm3-22b-RP-v2-GGUF
       # --hf-file calm3-22b-RP-v2-Q4_K_M.gguf
+      # --hf-repo Qwen/Qwen2.5-Coder-7B-Instruct-GGUF
+      # --hf-file qwen2.5-coder-7b-instruct-q8_0-00001-of-00003.gguf
+      # --ctx-size 131072
 
     command: >
       /llama-server
       --host 0.0.0.0
       --port 8000
-      --hf-repo grapevine-AI/EZO-Qwen2.5-32B-Instruct-GGUF
-      --hf-file EZO-Qwen2.5-32B-Instruct-Q4_K_M.gguf
+      --hf-repo grapevine-AI/gemma-2-2b-jpn-it-gguf
+      --hf-file gemma-2-2B-jpn-it-Q8_0.gguf
       --threads 8
       --n-gpu-layers 99
-      --ctx-size 8192
+      --ctx-size 4096
       -a gpt-4o-mini

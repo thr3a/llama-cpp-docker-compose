@@ -1,1 +1,3 @@
 /cache
+*.gguf
+/gemma-2-2b-jpn-it
