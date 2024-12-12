@@ -1,4 +1,32 @@
 services:
+  rag:
+    image: ghcr.io/ggerganov/llama.cpp:server-cuda
+    volumes:
+      - ./cache:/root/.cache
+    ports:
+      - "8001:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['1']
+              capabilities: [ gpu ]
+    tty: true
+    stop_grace_period: 0s
+    entrypoint: ''
+    environment:
+      TZ: Asia/Tokyo
+    command: >
+      /llama-server
+      --host 0.0.0.0
+      --port 8000
+      --hf-repo dahara1/Qwen2.5-3B-Instruct-gguf-japanese-imatrix-128K
+      --hf-file Qwen2.5-3B-Instruct-Q4_K_M.gguf
+      --threads 8
+      --n-gpu-layers 99
+      --ctx-size 131072
+      -a gpt-4o-mini
   app:
     image: ghcr.io/ggerganov/llama.cpp:server-cuda
     volumes:
@@ -33,8 +61,14 @@ services:
       # --hf-file calm3-22b-RP-v2-Q4_K_M.gguf
       # --hf-repo Qwen/Qwen2.5-Coder-7B-Instruct-GGUF
       # --hf-file qwen2.5-coder-7b-instruct-q8_0-00001-of-00003.gguf
-      # --ctx-size 131072
-
+      # --ctx-size 32768
+      # --hf-repo bartowski/Qwen2.5-Coder-32B-Instruct-GGUF
+      # --hf-file Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf
+      # --hf-repo dahara1/Qwen2.5-3B-Instruct-gguf-japanese-imatrix-128K
+      # --hf-file Qwen2.5-3B-Instruct-Q8_0-f16.gguf
+      # --hf-repo dahara1/Qwen2.5-7B-Instruct-gguf-japanese-imatrix-128K
+      # --hf-file Qwen2.5-7B-Instruct-Q4_K_M.gguf
+# 131072
     command: >
       /llama-server
       --host 0.0.0.0
