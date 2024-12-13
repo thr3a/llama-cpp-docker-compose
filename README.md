@@ -30,3 +30,39 @@ lora:
     -a gpt-4o-mini
     --lora /app/zunda-LoRA.gguf
 ```
+
+
+```bash
+docker run --runtime nvidia --gpus all \
+-v ./cache:/root/.cache \
+-p 8000:8000 \
+--ipc=host \
+vllm/vllm-openai:latest \
+--model Aratako/sarashina2.1-1b-sft
+```
+
+```bash
+curl http://deep01:8002/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "この画像には何人の人がいますか？"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "data:image/jpeg;base64,'$(base64 -i test.jpg)'"
+            }
+          }
+        ]
+      }
+    ],
+    "max_tokens": 300
+  }'
+```

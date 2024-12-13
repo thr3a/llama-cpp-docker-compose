@@ -1,8 +1,16 @@
+x-common-settings: &common-settings
+  image: ghcr.io/ggerganov/llama.cpp:server-cuda
+  volumes:
+    - ./cache:/root/.cache
+  environment:
+    TZ: Asia/Tokyo
+  tty: true
+  stop_grace_period: 0s
+  ipc: host
+
 services:
   rag:
-    image: ghcr.io/ggerganov/llama.cpp:server-cuda
-    volumes:
-      - ./cache:/root/.cache
+    <<: *common-settings
     ports:
       - "8001:8000"
     deploy:
@@ -12,13 +20,7 @@ services:
             - driver: nvidia
               device_ids: ['1']
               capabilities: [ gpu ]
-    tty: true
-    stop_grace_period: 0s
-    entrypoint: ''
-    environment:
-      TZ: Asia/Tokyo
     command: >
-      /llama-server
       --host 0.0.0.0
       --port 8000
       --hf-repo dahara1/Qwen2.5-3B-Instruct-gguf-japanese-imatrix-128K
@@ -27,10 +29,23 @@ services:
       --n-gpu-layers 99
       --ctx-size 131072
       -a gpt-4o-mini
-  app:
-    image: ghcr.io/ggerganov/llama.cpp:server-cuda
-    volumes:
-      - ./cache:/root/.cache
+  vllm:
+    <<: *common-settings
+    build:
+      context: ./vllm
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [ gpu ]
+    ports:
+      - "8002:8000"
+    command: --model Qwen/Qwen2-VL-7B-Instruct-AWQ --quantization awq --served-model-name gpt-4o-mini
+  main:
+    <<: *common-settings
     ports:
       - "8000:8000"
     deploy:
@@ -38,13 +53,8 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              # device_ids: ['1']
+              device_ids: ['1']
               capabilities: [ gpu ]
-    tty: true
-    stop_grace_period: 0s
-    entrypoint: ''
-    environment:
-      TZ: Asia/Tokyo
       # --hf-repo mmnga/HODACHI-EZO-Common-9B-gemma-2-it-gguf
       # --hf-file HODACHI-EZO-Common-9B-gemma-2-it-Q5_K_M.gguf
       # --hf-repo mmnga/Llama3-ArrowSE-8B-v0.3-gguf
@@ -68,9 +78,7 @@ services:
       # --hf-file Qwen2.5-3B-Instruct-Q8_0-f16.gguf
       # --hf-repo dahara1/Qwen2.5-7B-Instruct-gguf-japanese-imatrix-128K
       # --hf-file Qwen2.5-7B-Instruct-Q4_K_M.gguf
-# 131072
     command: >
-      /llama-server
       --host 0.0.0.0
       --port 8000
       --hf-repo grapevine-AI/gemma-2-2b-jpn-it-gguf
