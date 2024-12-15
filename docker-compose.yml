@@ -9,6 +9,14 @@ x-common-settings: &common-settings
   ipc: host
 
 services:
+  proxy:
+    image: ghcr.io/berriai/litellm:main-latest
+    ports:
+      - 4000:4000
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml
+    command: --config /app/config.yaml
+    restart: always
   rag:
     <<: *common-settings
     ports:
@@ -53,7 +61,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: ['1']
+              device_ids: ['0']
               capabilities: [ gpu ]
       # --hf-repo mmnga/HODACHI-EZO-Common-9B-gemma-2-it-gguf
       # --hf-file HODACHI-EZO-Common-9B-gemma-2-it-Q5_K_M.gguf
@@ -81,8 +89,8 @@ services:
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo grapevine-AI/gemma-2-2b-jpn-it-gguf
-      --hf-file gemma-2-2B-jpn-it-Q8_0.gguf
+      --hf-repo Aratako/calm3-22b-RP-GGUF
+      --hf-file calm3-22b-RP-Q4_K_M.gguf
       --threads 8
       --n-gpu-layers 99
       --ctx-size 4096

@@ -1,0 +1,16 @@
+model_list:
+  - model_name: main
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_base: http://192.168.16.20:8000
+      api_key: sk-dummy
+  - model_name: small-128k
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_base: http://192.168.16.20:8001
+      api_key: sk-dummy
+  - model_name: vision
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_base: http://192.168.16.20:8002/v1
+      api_key: sk-dummy
