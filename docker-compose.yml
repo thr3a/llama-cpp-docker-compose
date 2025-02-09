@@ -17,41 +17,41 @@ services:
       - ./litellm_config.yaml:/app/config.yaml
     command: --config /app/config.yaml
     restart: always
-  rag:
-    <<: *common-settings
-    ports:
-      - "8001:8000"
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ['1']
-              capabilities: [ gpu ]
-    command: >
-      --host 0.0.0.0
-      --port 8000
-      --hf-repo bartowski/Qwen2.5-3B-Instruct-GGUF
-      --hf-file Qwen2.5-3B-Instruct-Q4_K_M.gguf
-      --threads 8
-      --n-gpu-layers 99
-      --ctx-size 131072
-      -a gpt-4o-mini
-  vllm:
-    <<: *common-settings
-    build:
-      context: ./vllm
-      dockerfile: Dockerfile
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ['0']
-              capabilities: [ gpu ]
-    ports:
-      - "8002:8000"
-    command: --model Qwen/Qwen2-VL-7B-Instruct-AWQ --quantization awq --served-model-name gpt-4o-mini
+  # rag:
+  #   <<: *common-settings
+  #   ports:
+  #     - "8001:8000"
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             device_ids: ['1']
+  #             capabilities: [ gpu ]
+  #   command: >
+  #     --host 0.0.0.0
+  #     --port 8000
+  #     --hf-repo bartowski/Qwen2.5-3B-Instruct-GGUF
+  #     --hf-file Qwen2.5-3B-Instruct-Q4_K_M.gguf
+  #     --threads 8
+  #     --n-gpu-layers 99
+  #     --ctx-size 131072
+  #     -a gpt-4o-mini
+  # vllm:
+  #   <<: *common-settings
+  #   build:
+  #     context: ./vllm
+  #     dockerfile: Dockerfile
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             device_ids: ['0']
+  #             capabilities: [ gpu ]
+  #   ports:
+  #     - "8002:8000"
+  #   command: --model Qwen/Qwen2-VL-7B-Instruct-AWQ --quantization awq --served-model-name gpt-4o-mini
   main:
     <<: *common-settings
     ports:
@@ -96,14 +96,22 @@ services:
       # --hf-file DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf
       # --hf-repo Qwen/Qwen2.5-Coder-7B-Instruct-GGUF
       # --hf-file qwen2.5-coder-7b-instruct-q4_k_m.gguf
+      # --hf-repo mmnga/ABEJA-Qwen2.5-32b-Japanese-v0.1-gguf
+      # --hf-file ABEJA-Qwen2.5-32b-Japanese-v0.1-Q4_K_M.gguf
+      # --hf-repo unsloth/phi-4-GGUF
+      # --hf-file phi-4-Q4_K_M.gguf
+      # --hf-repo grapevine-AI/DeepSeek-R1-Distill-Qwen-32B-Japanese-GGUF
+      # --hf-file DeepSeek-R1-Distill-Qwen-32B-Japanese-Q4_K_M.gguf
+      # --hf-repo lmstudio-community/Qwen2.5-7B-Instruct-1M-GGUF
+      # --hf-file Qwen2.5-7B-Instruct-1M-Q4_K_M.gguf
 
 # 32768
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo mmnga/ABEJA-Qwen2.5-32b-Japanese-v0.1-gguf
-      --hf-file ABEJA-Qwen2.5-32b-Japanese-v0.1-Q4_K_M.gguf
+      --hf-repo mradermacher/ChatWaifu_22B_v2.0_preview-i1-GGUF
+      --hf-file ChatWaifu_22B_v2.0_preview.i1-Q4_K_M.gguf
       --threads 8
       --n-gpu-layers 99
-      --ctx-size 32768
+      --ctx-size 4096
       -a gpt-4o-mini
