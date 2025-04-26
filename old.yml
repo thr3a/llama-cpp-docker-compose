@@ -1,0 +1,15 @@
+vllm:
+  <<: *common-settings
+  build:
+    context: ./vllm
+    dockerfile: Dockerfile
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            device_ids: ['0']
+            capabilities: [ gpu ]
+  ports:
+    - "8002:8000"
+  command: --model Qwen/Qwen2-VL-7B-Instruct-AWQ --quantization awq --served-model-name gpt-4o-mini

@@ -7,6 +7,8 @@ x-common-settings: &common-settings
   tty: true
   stop_grace_period: 0s
   ipc: host
+  env_file:
+    - .env
 
 services:
   proxy:
@@ -17,41 +19,6 @@ services:
       - ./litellm_config.yaml:/app/config.yaml
     command: --config /app/config.yaml
     restart: always
-  # rag:
-  #   <<: *common-settings
-  #   ports:
-  #     - "8001:8000"
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             device_ids: ['1']
-  #             capabilities: [ gpu ]
-  #   command: >
-  #     --host 0.0.0.0
-  #     --port 8000
-  #     --hf-repo bartowski/Qwen2.5-3B-Instruct-GGUF
-  #     --hf-file Qwen2.5-3B-Instruct-Q4_K_M.gguf
-  #     --threads 8
-  #     --n-gpu-layers 99
-  #     --ctx-size 131072
-  #     -a gpt-4o-mini
-  # vllm:
-  #   <<: *common-settings
-  #   build:
-  #     context: ./vllm
-  #     dockerfile: Dockerfile
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             device_ids: ['0']
-  #             capabilities: [ gpu ]
-  #   ports:
-  #     - "8002:8000"
-  #   command: --model Qwen/Qwen2-VL-7B-Instruct-AWQ --quantization awq --served-model-name gpt-4o-mini
   main:
     <<: *common-settings
     ports:
@@ -61,32 +28,9 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: ['0']
+              device_ids: ['1']
+              # device_ids: ['0', '1']
               capabilities: [ gpu ]
-      # --hf-repo mmnga/HODACHI-EZO-Common-9B-gemma-2-it-gguf
-      # --hf-file HODACHI-EZO-Common-9B-gemma-2-it-Q5_K_M.gguf
-      # --hf-repo mmnga/Llama3-ArrowSE-8B-v0.3-gguf
-      # --hf-file Llama3-ArrowSE-8B-v0.3-Q5_K_M.gguf
-      # --hf-repo dahara1/gemma-2-27b-it-gguf-japanese-imatrix
-      # --hf-file gemma-2-27b-it.f16.Q5_k_m.gguf
-      # --hf-repo Aratako/calm3-22b-RP-GGUF
-      # --hf-file calm3-22b-RP-Q4_K_M.gguf
-      # --hf-repo grapevine-AI/c4ai-command-r-08-2024-gguf
-      # --hf-file c4ai-command-r-08-2024-Q4_K_M.gguf
-      # --hf-repo grapevine-AI/EZO-Qwen2.5-32B-Instruct-GGUF
-      # --hf-file EZO-Qwen2.5-32B-Instruct-Q4_K_M.gguf
-      # --hf-repo Aratako/calm3-22b-RP-v2-GGUF
-      # --hf-file calm3-22b-RP-v2-Q4_K_M.gguf
-      # --hf-repo Qwen/Qwen2.5-Coder-7B-Instruct-GGUF
-      # --hf-file qwen2.5-coder-7b-instruct-q8_0-00001-of-00003.gguf
-      # --ctx-size 32768
-      # --hf-repo bartowski/Qwen2.5-Coder-32B-Instruct-GGUF
-      # --hf-file Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf
-      # --hf-repo dahara1/Qwen2.5-3B-Instruct-gguf-japanese-imatrix-128K
-      # --hf-file Qwen2.5-3B-Instruct-Q8_0-f16.gguf
-      # --hf-repo dahara1/Qwen2.5-7B-Instruct-gguf-japanese-imatrix-128K
-      # --hf-file Qwen2.5-7B-Instruct-Q4_K_M.gguf
-
       # 新URL対応
       # --hf-repo Aratako/calm3-22b-RP-GGUF
       # --hf-file calm3-22b-RP-Q4_K_M.gguf
@@ -98,19 +42,49 @@ services:
       # --hf-file qwen2.5-coder-7b-instruct-q4_k_m.gguf
       # --hf-repo mmnga/ABEJA-Qwen2.5-32b-Japanese-v0.1-gguf
       # --hf-file ABEJA-Qwen2.5-32b-Japanese-v0.1-Q4_K_M.gguf
-      # --hf-repo unsloth/phi-4-GGUF
-      # --hf-file phi-4-Q4_K_M.gguf
       # --hf-repo grapevine-AI/DeepSeek-R1-Distill-Qwen-32B-Japanese-GGUF
       # --hf-file DeepSeek-R1-Distill-Qwen-32B-Japanese-Q4_K_M.gguf
       # --hf-repo lmstudio-community/Qwen2.5-7B-Instruct-1M-GGUF
       # --hf-file Qwen2.5-7B-Instruct-1M-Q4_K_M.gguf
-
+      # --hf-repo Undi95/Lumimaid-Magnum-v4-12B-GGUF
+      # --hf-file Lumimaid-Magnum-v4-12B.q4_k_m.gguf
+      # --hf-repo rinna/deepseek-r1-distill-qwen2.5-bakeneko-32b-gguf
+      # --hf-file deepseek-r1-distill-qwen2.5-bakeneko-32b-q4_k.gguf
+      # --hf-repo Undi95/Lumimaid-Magnum-v4-12B-GGUF
+      # --hf-file Lumimaid-Magnum-v4-12B.q8_0.gguf
+      # --hf-repo bartowski/Qwen_QwQ-32B-GGUF
+      # --hf-file Qwen_QwQ-32B-Q4_K_M.gguf
+      # --hf-repo mmnga/Mistral-Small-3.1-24B-Instruct-2503-HF-gguf
+      # --hf-file Mistral-Small-3.1-24B-Instruct-2503-HF-Q8_0.gguf
 # 32768
+      # --model /grpo/unsloth.Q8_0.gguf
+# QwQ
+# --samplers "top_k;top_p;min_p;temperature;dry;typ_p;xtc"
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo mradermacher/ChatWaifu_22B_v2.0_preview-i1-GGUF
-      --hf-file ChatWaifu_22B_v2.0_preview.i1-Q4_K_M.gguf
+      --hf-repo mmnga/shisa-v2-qwen2.5-7b-gguf
+      --hf-file shisa-v2-qwen2.5-7b-Q4_0.gguf
+      --threads 8
+      --n-gpu-layers 99
+      --ctx-size 4096
+      -a gpt-4o-mini
+  sub:
+    <<: *common-settings
+    ports:
+      - "8001:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [ gpu ]
+    command: >
+      --host 0.0.0.0
+      --port 8000
+      --hf-repo Aratako/gemma-3-4b-it-RP-v0.1-GGUF
+      --hf-file gemma-3-4b-it-RP-v0.1-Q8_0.gguf
       --threads 8
       --n-gpu-layers 99
       --ctx-size 4096
