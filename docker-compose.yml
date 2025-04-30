@@ -63,11 +63,11 @@ services:
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo mmnga/shisa-v2-qwen2.5-7b-gguf
-      --hf-file shisa-v2-qwen2.5-7b-Q4_0.gguf
+      --hf-repo mmnga/Qwen3-30B-A3B-gguf
+      --hf-file Qwen3-30B-A3B-Q4_K_M.gguf
       --threads 8
       --n-gpu-layers 99
-      --ctx-size 4096
+      --ctx-size 32768
       -a gpt-4o-mini
   sub:
     <<: *common-settings
@@ -83,8 +83,8 @@ services:
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo google/gemma-3-12b-it-qat-q4_0-gguf
-      --hf-file gemma-3-12b-it-q4_0.gguf
+      --hf-repo unsloth/Qwen3-14B-GGUF
+      --hf-file Qwen3-14B-Q4_K_M.gguf
       --threads 8
       --n-gpu-layers 99
       --ctx-size 4096
