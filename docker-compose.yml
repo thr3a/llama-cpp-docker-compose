@@ -28,19 +28,24 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              # device_ids: ['0']
-              device_ids: ['0', '1']
+              device_ids: ['0']
+              # device_ids: ['0', '1']
               capabilities: [ gpu ]
   # --hf-repo mmnga/Mistral-Small-3.1-24B-Instruct-2503-HF-gguf
   # --hf-file Mistral-Small-3.1-24B-Instruct-2503-HF-Q8_0.gguf
+  # --hf-repo Aratako/NemoAurora-RP-12B-GGUF
+  # --hf-file NemoAurora-RP-12B-Q8_0.gguf
+  # --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
+  # --hf-file Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo mmnga/Mistral-Small-3.1-24B-Instruct-2503-HF-gguf
-      --hf-file Mistral-Small-3.1-24B-Instruct-2503-HF-Q8_0.gguf
-      --threads 8
+      --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
+      --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
+      --threads -1
       --n-gpu-layers 99
-      --ctx-size 4096
+      --ctx-size 8096
       -a gpt-4o-mini
   sub:
     <<: *common-settings
@@ -56,8 +61,8 @@ services:
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo Aratako/Qwen3-8B-ERP-v0.1-GGUF
-      --hf-file Qwen3-8B-ERP-v0.1-Q8_0.gguf
+      --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
+      --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
       --threads 8
       --n-gpu-layers 99
       --ctx-size 4096
