@@ -33,16 +33,11 @@ services:
               capabilities: [ gpu ]
   # --hf-repo mmnga/Mistral-Small-3.1-24B-Instruct-2503-HF-gguf
   # --hf-file Mistral-Small-3.1-24B-Instruct-2503-HF-Q8_0.gguf
-  # --hf-repo Aratako/NemoAurora-RP-12B-GGUF
-  # --hf-file NemoAurora-RP-12B-Q8_0.gguf
-  # --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
-  # --hf-file Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
-
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
-      --hf-file Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+      --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
+      --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
       --threads 4
       --n-gpu-layers 99
       --ctx-size 8096
