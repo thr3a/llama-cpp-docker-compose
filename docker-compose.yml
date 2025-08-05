@@ -31,8 +31,9 @@ services:
               device_ids: ['0']
               # device_ids: ['0', '1']
               capabilities: [ gpu ]
-  # --hf-repo mmnga/Mistral-Small-3.1-24B-Instruct-2503-HF-gguf
-  # --hf-file Mistral-Small-3.1-24B-Instruct-2503-HF-Q8_0.gguf
+      # --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
+      # --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
+      # --hf-repo google/gemma-3-27b-it-qat-q4_0-gguf
     command: >
       --host 0.0.0.0
       --port 8000
@@ -40,29 +41,29 @@ services:
       --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
       --threads 4
       --n-gpu-layers 99
-      --ctx-size 8096
-      -a gpt-4o-mini --no-mmap
-  sub:
-    <<: *common-settings
-    ports:
-      - "8001:8000"
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ['1']
-              capabilities: [ gpu ]
-    command: >
-      --host 0.0.0.0
-      --port 8000
-      --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
-      --hf-file Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
-      --threads 4
-      --n-gpu-layers 30
-      --ctx-size 4096
+      --ctx-size 20000
       -a gpt-4o-mini
-      --jinja --temp 0.7 --min-p 0.0 --top-p 0.80 --top-k 20 --presence-penalty 1.0 
+  # sub:
+  #   <<: *common-settings
+  #   ports:
+  #     - "8001:8000"
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             device_ids: ['1']
+  #             capabilities: [ gpu ]
+  #   command: >
+  #     --host 0.0.0.0
+  #     --port 8000
+  #     --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
+  #     --hf-file Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+  #     --threads 4
+  #     --n-gpu-layers 30
+  #     --ctx-size 4096
+  #     -a gpt-4o-mini
+  #     --jinja --temp 0.7 --min-p 0.0 --top-p 0.80 --top-k 20 --presence-penalty 1.0 
 
   cpu:
     <<: *common-settings
