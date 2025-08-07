@@ -39,10 +39,21 @@ services:
       --port 8000
       --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
       --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
-      --threads 4
+      --threads -1
       --n-gpu-layers 99
       --ctx-size 20000
       -a gpt-4o-mini
+      --n-predict 1024
+      --top-p 1
+      --min-p 0.05
+      --repeat-last-n 0
+      --dry-multiplier 0.8
+      --dry-allowed-length 4
+      --dry-penalty-last-n 0
+      --dry-sequence-breaker "\n : \" * <s> </s> [SYSTEM_PROMPT] [/SYSTEM_PROMPT] [INST] [/INST]"
+      --dynatemp-exp 5.77
+      --samplers "dry;top_k;tfs;typical;top_p;min_p;xtc;temperature"
+
   # sub:
   #   <<: *common-settings
   #   ports:
@@ -73,8 +84,8 @@ services:
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
-      --hf-file Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
+      --hf-repo bartowski/ArliAI_Mistral-Small-24B-ArliAI-RPMax-v1.4-GGUF
+      --hf-file ArliAI_Mistral-Small-24B-ArliAI-RPMax-v1.4-Q4_K_M.gguf
       --threads 8
       --ctx-size 4096
       -a gpt-4o-mini
