@@ -84,8 +84,21 @@ services:
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo bartowski/ArliAI_Mistral-Small-24B-ArliAI-RPMax-v1.4-GGUF
-      --hf-file ArliAI_Mistral-Small-24B-ArliAI-RPMax-v1.4-Q4_K_M.gguf
+      --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
+      --hf-file Qwen3-30B-A3B-Instruct-2507-Q8_0.gguf
       --threads 8
       --ctx-size 4096
       -a gpt-4o-mini
+
+  # benchmark:
+  #   <<: *common-settings
+  #   image: ghcr.io/ggml-org/llama.cpp:full
+  #   entrypoint: '/app/llama-bench'
+  #   command: >
+  #     -m /root/.cache/llama.cpp/unsloth_Qwen3-30B-A3B-Instruct-2507-GGUF_Qwen3-30B-A3B-Instruct-2507-Q8_0.gguf
+  #     -r 2
+  #     --n-prompt 512
+  #     --n-gen 128
+  #     --batch-size 128,256,512,1024,2048
+  #     --threads 8
+  #     --flash-attn 1
