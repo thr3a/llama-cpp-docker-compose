@@ -39,7 +39,7 @@ services:
       --port 8000
       --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
       --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
-      --threads -1
+      --threads 8
       --n-gpu-layers 99
       --ctx-size 20000
       -a gpt-4o-mini
