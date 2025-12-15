@@ -1,5 +1,4 @@
 x-common-settings: &common-settings
-  image: ghcr.io/ggml-org/llama.cpp:server-cuda
   volumes:
     - ./cache:/root/.cache
   environment:
@@ -11,94 +10,28 @@ x-common-settings: &common-settings
     - .env
 
 services:
-  proxy:
-    image: ghcr.io/berriai/litellm:main-latest
-    ports:
-      - 4000:4000
-    volumes:
-      - ./litellm_config.yaml:/app/config.yaml
-    command: --config /app/config.yaml
-    restart: always
   main:
     <<: *common-settings
+    image: vulkan-amdvlk:1.0
     ports:
       - "8000:8000"
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ['0']
-              # device_ids: ['0', '1']
-              capabilities: [ gpu ]
-      # --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
-      # --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
-      # --hf-repo google/gemma-3-27b-it-qat-q4_0-gguf
+    devices:
+      - "/dev/dri:/dev/dri"
+    privileged: true
     command: >
+      /usr/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
-      --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
-      --threads 8
-      --n-gpu-layers 99
-      --ctx-size 20000
-      -a gpt-4o-mini
-      --n-predict 1024
-      --top-p 1
-      --min-p 0.05
-      --repeat-last-n 0
-      --dry-multiplier 0.8
-      --dry-allowed-length 4
-      --dry-penalty-last-n 0
-      --dry-sequence-breaker "\n : \" * <s> </s> [SYSTEM_PROMPT] [/SYSTEM_PROMPT] [INST] [/INST]"
-      --dynatemp-exp 5.77
-      --samplers "dry;top_k;tfs;typical;top_p;min_p;xtc;temperature"
-
-  # sub:
-  #   <<: *common-settings
-  #   ports:
-  #     - "8001:8000"
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             device_ids: ['1']
-  #             capabilities: [ gpu ]
-  #   command: >
-  #     --host 0.0.0.0
-  #     --port 8000
-  #     --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
-  #     --hf-file Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf
-  #     --threads 4
-  #     --n-gpu-layers 30
-  #     --ctx-size 4096
-  #     -a gpt-4o-mini
-  #     --jinja --temp 0.7 --min-p 0.0 --top-p 0.80 --top-k 20 --presence-penalty 1.0 
-
-  cpu:
+      -hf unsloth/Qwen3-Next-80B-A3B-Instruct-GGUF:Q8_0
+      -ngl 99 --ctx-size 262144 -a gpt-4o-mini --no-mmap --flash-attn on
+      --temp 0 --min-p 0.0 --top-p 0.80 --top-k 20 --presence-penalty 1.0 --jinja
+      --verbose
+  download:
     <<: *common-settings
-    image: ghcr.io/ggml-org/llama.cpp:server
-    ports:
-      - "8002:8000"
+    image: vulkan-amdvlk:1.0
     command: >
+      /usr/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
-      --hf-file Qwen3-30B-A3B-Instruct-2507-Q8_0.gguf
-      --threads 8
-      --ctx-size 4096
-      -a gpt-4o-mini
-
-  # benchmark:
-  #   <<: *common-settings
-  #   image: ghcr.io/ggml-org/llama.cpp:full
-  #   entrypoint: '/app/llama-bench'
-  #   command: >
-  #     -m /root/.cache/llama.cpp/unsloth_Qwen3-30B-A3B-Instruct-2507-GGUF_Qwen3-30B-A3B-Instruct-2507-Q8_0.gguf
-  #     -r 2
-  #     --n-prompt 512
-  #     --n-gen 128
-  #     --batch-size 128,256,512,1024,2048
-  #     --threads 8
-  #     --flash-attn 1
+      -hf unsloth/Devstral-2-123B-Instruct-2512-GGUF:Q4_K_M
+      -ngl 99 --ctx-size 2000 -a gpt-4o-mini --no-mmap --jinja
