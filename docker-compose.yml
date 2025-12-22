@@ -35,6 +35,8 @@ services:
   #     --port 8000
   #     -hf unsloth/Qwen3-235B-A22B-Instruct-2507-GGUF:UD-Q3_K_XL
   #     -ngl 1 --ctx-size 2000 -a gpt-4o-mini --no-mmap --jinja
+
+  # docker compose run --rm -T benchmark 2> logs.txt
   # benchmark:
   #   <<: *common-settings
   #   image: vulkan-amdvlk:1.0
