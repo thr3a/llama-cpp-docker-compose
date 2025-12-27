@@ -34,4 +34,4 @@ class MessageTruncationHandler(CustomLogger):
         return data  
   
 # インスタンスを作成  
-message_truncation_handler = MessageTruncationHandler(max_messages=10)
+message_truncation_handler = MessageTruncationHandler(max_messages=20)
