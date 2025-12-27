@@ -9,11 +9,11 @@ model_list:
       api_base: http://main:8000
       api_key: sk-dummy
 
-  # - model_name: sub
-  #   litellm_params:
-  #     model: openai/gpt-4o-mini
-  #     api_base: http://sub:8000
-  #     api_key: sk-dummy
+  - model_name: sub
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_base: http://sub:8000
+      api_key: sk-dummy
 
   # - model_name: cpu
   #   litellm_params:
