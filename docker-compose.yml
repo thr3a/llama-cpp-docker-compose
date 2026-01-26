@@ -16,7 +16,7 @@ services:
       - 4000:4000
     volumes:
       - ./litellm_config.yaml:/app/config.yaml
-      - ./message_truncation_callback.py:/app/message_truncation_callback
+      - ./message_truncation_callback.py:/app/message_truncation_callback.py
     command: --config /app/config.yaml
     restart: always
   main:
