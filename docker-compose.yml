@@ -1,11 +1,13 @@
 x-common-settings: &common-settings
   volumes:
-    - ./cache:/root/.cache
+    - ./cache:/root/.cache:ro
   environment:
     TZ: Asia/Tokyo
   tty: true
   stop_grace_period: 0s
   ipc: host
+  security_opt:
+    - seccomp:unconfined
   env_file:
     - .env
 
@@ -34,11 +36,11 @@ services:
       /usr/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      -hf ubergarm/Step-3.5-Flash-GGUF:IQ4_XS
+      --model /root/.cache/llama.cpp/ubergarm_Step-3.5-Flash-GGUF_IQ4_XS_Step-3.5-Flash-IQ4_XS-00001-of-00004.gguf
       -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --batch-size 2048 --ubatch-size 1024 --no-mmap
       --jinja
       --cache-reuse 512 --cache-ram -1 --cache-type-k q8_0 --cache-type-v q8_0
-      --chat-template-kwargs "{\"enable_thinking\": false}"
+      --reasoning-budget 0
 
     # command: >
     #   /usr/bin/llama-server
