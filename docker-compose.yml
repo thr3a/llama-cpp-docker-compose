@@ -1,24 +1,17 @@
 x-common-settings: &common-settings
   image: ghcr.io/ggml-org/llama.cpp:server-cuda
   volumes:
-    - ./cache:/root/.cache
+    - ./cache:/root/.cache:ro
   environment:
     TZ: Asia/Tokyo
   tty: true
   stop_grace_period: 0s
   ipc: host
+  security_opt:
+    - seccomp:unconfined
   env_file:
     - .env
-
 services:
-  proxy:
-    image: ghcr.io/berriai/litellm:main-latest
-    ports:
-      - 4000:4000
-    volumes:
-      - ./litellm_config.yaml:/app/config.yaml
-    command: --config /app/config.yaml
-    restart: always
   main:
     <<: *common-settings
     ports:
@@ -31,9 +24,6 @@ services:
               device_ids: ['0']
               # device_ids: ['0', '1']
               capabilities: [ gpu ]
-      # --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
-      # --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
-      # --hf-repo google/gemma-3-27b-it-qat-q4_0-gguf
     command: >
       --host 0.0.0.0
       --port 8000
