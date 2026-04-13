@@ -3,11 +3,20 @@ litellm_settings:
   callbacks: ["message_truncation_callback.message_truncation_handler"]
 
 model_list:
-  - model_name: main
+  - model_name: deep02
     litellm_params:
       model: openai/gpt-4o-mini
       api_base: http://main:8000
       api_key: sk-dummy
+
+  - model_name: deep02-reasoning-off
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_base: http://main:8000
+      api_key: sk-dummy
+      extra_body:
+        chat_template_kwargs:
+          enable_thinking: false
 
   - model_name: deep01
     litellm_params:
