@@ -27,22 +27,13 @@ services:
     command: >
       --host 0.0.0.0
       --port 8000
-      --hf-repo unsloth/Mistral-Small-3.2-24B-Instruct-2506-GGUF
-      --hf-file Mistral-Small-3.2-24B-Instruct-2506-Q4_K_M.gguf
+      --model /root/.cache/llama.cpp/gemma-4-31B-it-Q4_K_M.gguf
       --threads 8
       --n-gpu-layers 99
-      --ctx-size 20000
+      --ctx-size 40000
       -a gpt-4o-mini
-      --n-predict 1024
-      --top-p 1
-      --min-p 0.05
-      --repeat-last-n 0
-      --dry-multiplier 0.8
-      --dry-allowed-length 4
-      --dry-penalty-last-n 0
-      --dry-sequence-breaker "\n : \" * <s> </s> [SYSTEM_PROMPT] [/SYSTEM_PROMPT] [INST] [/INST]"
-      --dynatemp-exp 5.77
-      --samplers "dry;top_k;tfs;typical;top_p;min_p;xtc;temperature"
+      --flash-attn on
+      --cache-reuse 512 --cache-ram -1 --cache-type-k q8_0 --cache-type-v q8_0
 
   # sub:
   #   <<: *common-settings
@@ -66,19 +57,19 @@ services:
   #     -a gpt-4o-mini
   #     --jinja --temp 0.7 --min-p 0.0 --top-p 0.80 --top-k 20 --presence-penalty 1.0 
 
-  cpu:
-    <<: *common-settings
-    image: ghcr.io/ggml-org/llama.cpp:server
-    ports:
-      - "8002:8000"
-    command: >
-      --host 0.0.0.0
-      --port 8000
-      --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
-      --hf-file Qwen3-30B-A3B-Instruct-2507-Q8_0.gguf
-      --threads 8
-      --ctx-size 4096
-      -a gpt-4o-mini
+  # cpu:
+  #   <<: *common-settings
+  #   image: ghcr.io/ggml-org/llama.cpp:server
+  #   ports:
+  #     - "8002:8000"
+  #   command: >
+  #     --host 0.0.0.0
+  #     --port 8000
+  #     --hf-repo unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
+  #     --hf-file Qwen3-30B-A3B-Instruct-2507-Q8_0.gguf
+  #     --threads 8
+  #     --ctx-size 4096
+  #     -a gpt-4o-mini
 
   # benchmark:
   #   <<: *common-settings
