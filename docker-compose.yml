@@ -23,8 +23,8 @@ services:
     restart: always
   main:
     <<: *common-settings
-    image: vulkan-amdvlk:1.0
-    # image: rocm-6.4.4:1.0
+    # image: kyuz0/amd-strix-halo-toolboxes:vulkan-amdvlk_20260318T132624
+    image: kyuz0/amd-strix-halo-toolboxes:rocm-7.2.1_20260413T135331
     ports:
       - "8000:8000"
     devices:
@@ -32,68 +32,12 @@ services:
     privileged: true
     restart: always
     # --chat-template-kwargs "{\"enable_thinking\": false}"
+    # --reasoning off
     command: >
       /usr/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      --model /root/.cache/llama.cpp/ubergarm_Step-3.5-Flash-GGUF_IQ4_XS_Step-3.5-Flash-IQ4_XS-00001-of-00004.gguf
+      --model /root/.cache/llama.cpp/gemma-4-31B-it-Q4_K_M.gguf
       -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --batch-size 2048 --ubatch-size 1024 --no-mmap
       --jinja
       --cache-reuse 512 --cache-ram -1 --cache-type-k q8_0 --cache-type-v q8_0
-      --reasoning-budget 0
-
-    # command: >
-    #   /usr/bin/llama-server
-    #   --host 0.0.0.0
-    #   --port 8000
-    #   -hf unsloth/Qwen3-Coder-Next-GGUF:Q8_0
-    #   -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --batch-size 2048 --ubatch-size 1024 --no-mmap
-    #   --jinja
-    #   --cache-reuse 512 --cache-ram -1 --cache-type-k q8_0 --cache-type-v q8_0
-
-  # sub:
-  #   <<: *common-settings
-  #   image: vulkan-amdvlk:1.0
-  #   ports:
-  #     - "8001:8000"
-  #   devices:
-  #     - "/dev/dri:/dev/dri"
-  #   privileged: true
-  #   command: >
-  #     /usr/bin/llama-server
-  #     --host 0.0.0.0
-  #     --port 8000
-  #     -hf unsloth/Qwen3-4B-Instruct-2507-GGUF:Q8_0
-  #     -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16
-  #     --temp 0.6 --min-p 0.0 --top-p 0.95 --top-k 20 --presence-penalty 1.0
-  #     --jinja
-
-  # download:
-  #   <<: *common-settings
-  #   image: vulkan-amdvlk:1.0
-  #   command: >
-  #     /usr/bin/llama-server
-  #     --host 0.0.0.0
-  #     --port 8000
-  #     -hf unsloth/GLM-4.7-Flash-GGUF:Q8_0
-  #     -ngl 1 --ctx-size 2000 -a gpt-4o-mini --no-mmap --jinja
-
-  # docker compose run --rm -T benchmark 2> logs.txt
-  # benchmark:
-  #   <<: *common-settings
-  #   image: vulkan-amdvlk:1.0
-  #   devices:
-  #     - "/dev/dri:/dev/dri"
-  #   privileged: true
-  #   command: >
-  #     /usr/bin/llama-bench
-  #     -m /root/.cache/llama.cpp/unsloth_Qwen3-4B-Instruct-2507-GGUF_Qwen3-4B-Instruct-2507-Q4_0.gguf
-  #     -d 4000
-  #     -p 2048
-  #     -n 128
-  #     --repetitions 1
-  #     -mmp 0 --flash-attn 1 -ngl 99 --threads 16 --cache-type-k q8_0 --cache-type-v q8_0 --batch-size 2048 --ubatch-size 1024
-  #     --verbose
-
-# /root/.cache/llama.cpp/unsloth_Qwen3-4B-Instruct-2507-GGUF_Qwen3-4B-Instruct-2507-Q4_0.gguf
-# /root/.cache/llama.cpp/unsloth_Qwen3-235B-A22B-Instruct-2507-GGUF_UD-Q3_K_XL_Qwen3-235B-A22B-Instruct-2507-UD-Q3_K_XL-00001-of-00003.gguf
