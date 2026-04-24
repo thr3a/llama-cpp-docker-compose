@@ -13,7 +13,7 @@ x-common-settings: &common-settings
 
 services:
   proxy:
-    image: ghcr.io/berriai/litellm:1.80.15-stable.1
+    image: ghcr.io/berriai/litellm:main-v1.83.7-stable
     ports:
       - 4000:4000
     volumes:
@@ -23,8 +23,7 @@ services:
     restart: always
   main:
     <<: *common-settings
-    # image: kyuz0/amd-strix-halo-toolboxes:vulkan-amdvlk_20260318T132624
-    image: kyuz0/amd-strix-halo-toolboxes:rocm-7.2.1_20260413T135331
+    image: kyuz0/amd-strix-halo-toolboxes:rocm-7.2.1-pr21344_20260424T205607
     ports:
       - "8000:8000"
     devices:
@@ -37,7 +36,7 @@ services:
       /usr/local/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      --model /root/.cache/llama.cpp/gemma-4-31B-it-Q4_K_M.gguf
-      -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --batch-size 2048 --ubatch-size 1024 --no-mmap
+      --model /root/.cache/llama.cpp/Qwen3.6-27B-Q4_K_M.gguf
+      -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --no-mmap
       --jinja
-      --cache-reuse 512 --cache-ram -1 --cache-type-k q8_0 --cache-type-v q8_0
+      --reasoning off
