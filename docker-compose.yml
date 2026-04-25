@@ -36,7 +36,7 @@ services:
       /usr/local/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      --model /root/.cache/llama.cpp/Qwen3.6-27B-Q4_K_M.gguf
-      -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --no-mmap
+      --model /root/.cache/llama.cpp/gemma-4-31B-it-Q4_K_M.gguf
+      -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --no-mmap --direct-io
       --jinja
-      --reasoning off
+      --cache-type-k q8_0 --cache-type-v q8_0 --ubatch-size 2048 --batch-size 2048
