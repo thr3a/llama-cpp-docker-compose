@@ -32,6 +32,7 @@ services:
     restart: always
     # --chat-template-kwargs "{\"enable_thinking\": false}"
     # --reasoning off
+    # gemma-4-31B-it-Q4_K_M.gguf
     command: >
       /usr/local/bin/llama-server
       --host 0.0.0.0
@@ -40,3 +41,4 @@ services:
       -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --no-mmap --direct-io
       --jinja
       --cache-type-k q8_0 --cache-type-v q8_0 --ubatch-size 2048 --batch-size 2048
+      --mmproj /root/.cache/llama.cpp/gemma-4-31B-mmproj-BF16.gguf
