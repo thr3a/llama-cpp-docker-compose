@@ -12,33 +12,42 @@ x-common-settings: &common-settings
     - .env
 
 services:
-  proxy:
-    image: ghcr.io/berriai/litellm:main-v1.83.7-stable
-    ports:
-      - 4000:4000
-    volumes:
-      - ./litellm_config.yaml:/app/config.yaml
-      - ./message_truncation_callback.py:/app/message_truncation_callback.py
-    command: --config /app/config.yaml
-    restart: always
   main:
     <<: *common-settings
-    image: kyuz0/amd-strix-halo-toolboxes:rocm-7.2.1-pr21344_20260424T205607
+    image: kyuz0/amd-strix-halo-toolboxes:rocm-7.2.3_20260513T144748
     ports:
       - "8000:8000"
     devices:
       - "/dev/dri:/dev/dri"
     privileged: true
     restart: always
-    # --chat-template-kwargs "{\"enable_thinking\": false}"
-    # --reasoning off
-    # gemma-4-31B-it-Q4_K_M.gguf
     command: >
       /usr/local/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      --model /root/.cache/llama.cpp/gemma-4-31B-it-Q4_K_M.gguf
+      --model /root/.cache/llama.cpp/Mistral-Medium-3.5-128B-UD-Q2_K_XL.gguf
       -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --no-mmap --direct-io
       --jinja
       --cache-type-k q8_0 --cache-type-v q8_0 --ubatch-size 2048 --batch-size 2048
-      --mmproj /root/.cache/llama.cpp/gemma-4-31B-mmproj-BF16.gguf
+
+  # main:
+  #   <<: *common-settings
+  #   image: kyuz0/amd-strix-halo-toolboxes:rocm-7.2.1-pr21344_20260424T205607
+  #   ports:
+  #     - "8000:8000"
+  #   devices:
+  #     - "/dev/dri:/dev/dri"
+  #   privileged: true
+  #   restart: always
+  #   # --chat-template-kwargs "{\"enable_thinking\": false}"
+  #   # --reasoning off
+  #   # gemma-4-31B-it-Q4_K_M.gguf
+  #   # --mmproj /root/.cache/llama.cpp/gemma-4-31B-mmproj-BF16.gguf
+  #   command: >
+  #     /usr/local/bin/llama-server
+  #     --host 0.0.0.0
+  #     --port 8000
+  #     --model /root/.cache/llama.cpp/Mistral-Medium-3.5-128B-UD-Q2_K_XL.gguf
+  #     -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --no-mmap --direct-io
+  #     --jinja
+  #     --cache-type-k q8_0 --cache-type-v q8_0 --ubatch-size 2048 --batch-size 2048
