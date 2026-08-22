@@ -14,7 +14,7 @@ x-common-settings: &common-settings
 services:
   main:
     <<: *common-settings
-    image: kyuz0/amd-strix-halo-toolboxes:rocm-7.14_20260822T083627
+    image: kyuz0/amd-strix-halo-toolboxes:vulkan-radv-performance_20260822T090617
     ports:
       - "8000:8000"
     devices:
@@ -23,10 +23,13 @@ services:
     restart: always
     # --no-mmap --direct-io
     command: >
-      /usr/local/bin/llama-server
+      /usr/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      --model /models/Qwen3.8-27B-UD-Q4_K_M.gguf
-      -ngl 99 --ctx-size 262144 -a gpt-4o-mini --flash-attn on --threads 16
+      -m /models/gemma-4-26B-A4B/gemma-4-26B-A4B-it-Q8_0.gguf
+      -md /models/gemma-4-26B-A4B/mtp-gemma-4-26B-A4B-it-Q8_0.gguf
+      --mmproj /models/gemma-4-26B-A4B/mmproj-BF16.gguf
+      -ngl 99 -c 262144 -a gpt-4o-mini --flash-attn on --threads 16
       --jinja
-      --cache-type-k q8_0 --cache-type-v q8_0 --ubatch-size 2048 --batch-size 2048
+      -ctv q8_0 -ctk q8_0 --ubatch-size 2048 --batch-size 2048
+      --spec-type draft-mtp --spec-draft-n-max 4
