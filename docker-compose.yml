@@ -1,6 +1,6 @@
 x-common-settings: &common-settings
   volumes:
-    - ./cache:/root/.cache:ro
+    - ./models:/models:ro
   environment:
     TZ: Asia/Tokyo
   tty: true
@@ -14,40 +14,19 @@ x-common-settings: &common-settings
 services:
   main:
     <<: *common-settings
-    image: kyuz0/amd-strix-halo-toolboxes:rocm-7.2.4_20260621T045312
+    image: kyuz0/amd-strix-halo-toolboxes:rocm-7.14_20260822T083627
     ports:
       - "8000:8000"
     devices:
       - "/dev/dri:/dev/dri"
     privileged: true
     restart: always
+    # --no-mmap --direct-io
     command: >
       /usr/local/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      --model /root/.cache/llama.cpp/gemma-4-26B-A4B-it-Q8_0.gguf
-      -ngl 99 --ctx-size 262144 -a gpt-4o-mini --flash-attn on --threads 16 --no-mmap --direct-io
+      --model /models/Qwen3.8-27B-UD-Q4_K_M.gguf
+      -ngl 99 --ctx-size 262144 -a gpt-4o-mini --flash-attn on --threads 16
       --jinja
       --cache-type-k q8_0 --cache-type-v q8_0 --ubatch-size 2048 --batch-size 2048
-
-  # main:
-  #   <<: *common-settings
-  #   image: kyuz0/amd-strix-halo-toolboxes:rocm-7.2.1-pr21344_20260424T205607
-  #   ports:
-  #     - "8000:8000"
-  #   devices:
-  #     - "/dev/dri:/dev/dri"
-  #   privileged: true
-  #   restart: always
-  #   # --chat-template-kwargs "{\"enable_thinking\": false}"
-  #   # --reasoning off
-  #   # gemma-4-31B-it-Q4_K_M.gguf
-  #   # --mmproj /root/.cache/llama.cpp/gemma-4-31B-mmproj-BF16.gguf
-  #   command: >
-  #     /usr/local/bin/llama-server
-  #     --host 0.0.0.0
-  #     --port 8000
-  #     --model /root/.cache/llama.cpp/Mistral-Medium-3.5-128B-UD-Q2_K_XL.gguf
-  #     -ngl 99 --ctx-size 32768 -a gpt-4o-mini --flash-attn on --threads 16 --no-mmap --direct-io
-  #     --jinja
-  #     --cache-type-k q8_0 --cache-type-v q8_0 --ubatch-size 2048 --batch-size 2048
