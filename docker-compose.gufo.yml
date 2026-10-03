@@ -1,0 +1,28 @@
+x-common-settings: &common-settings
+  volumes:
+    - ./models:/models:ro
+  environment:
+    TZ: Asia/Tokyo
+  tty: true
+  stop_grace_period: 0s
+  ipc: host
+  security_opt:
+    - seccomp:unconfined
+
+services:
+  main:
+    <<: *common-settings
+    image: kyuz0/amd-strix-halo-toolboxes:rocm-10.0-gufo_20261001T115730
+    ports:
+      - "8000:8000"
+    devices:
+      - "/dev/dri:/dev/dri"
+    privileged: true
+    restart: always
+    # --no-mmap --direct-io
+    command: >
+      gufo serve --host 0.0.0.0 --port 8000 llm
+      --model /models/Qwen3.8-Flash-Next-GGUF-unsloth/UD-Q4_K_XL/Qwen3.8-Flash-Next-UD-Q4_K_XL-00001-of-00004.gguf
+      --served-model-name gpt-4o-mini --context 40000
+      --mtp-model /models/Qwen3.8-Flash-Next-GGUF-unsloth/UD-Q4_K_XL/mtp-Qwen3.8-Flash-Next-shared-Q8_0.gguf
+      --draft-tokens 4

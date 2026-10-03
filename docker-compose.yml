@@ -14,7 +14,7 @@ x-common-settings: &common-settings
 services:
   main:
     <<: *common-settings
-    image: kyuz0/amd-strix-halo-toolboxes:vulkan-radv-performance_20260822T090617
+    image: kyuz0/amd-strix-halo-toolboxes:rocm-10.0-strix-llama_20261002T205121
     ports:
       - "8000:8000"
     devices:
@@ -22,14 +22,14 @@ services:
     privileged: true
     restart: always
     # --no-mmap --direct-io
+    # --mmproj /models/gemma-4-26B-A4B/mmproj-BF16.gguf
     command: >
-      /usr/bin/llama-server
+      /usr/local/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      -m /models/gemma-4-26B-A4B/gemma-4-26B-A4B-it-Q8_0.gguf
-      -md /models/gemma-4-26B-A4B/mtp-gemma-4-26B-A4B-it-Q8_0.gguf
-      --mmproj /models/gemma-4-26B-A4B/mmproj-BF16.gguf
-      -ngl 99 -c 262144 -a gpt-4o-mini --flash-attn on --threads 16
-      --jinja
-      -ctv q8_0 -ctk q8_0 --ubatch-size 2048 --batch-size 2048
-      --spec-type draft-mtp --spec-draft-n-max 4
+      -m /models/Qwen3.8-Flash-Next-Uncensored-GGUF/Qwen3.8-Flash-Next-Uncensored-Q4_K_M-00001-of-00003.gguf
+      -md /models/Qwen3.8-Flash-Next-Uncensored-GGUF/Qwen3.8-Flash-Next-Uncensored-MTP-draft.gguf
+      -ngl all -c 262144 -a gpt-4o-mini --flash-attn on --threads 16 --jinja
+      -fit off --load-mode none --lazy-mode on-direct
+      -ctv q8_0 -ctk q8_0 --ubatch-size 16384 --batch-size 16384
+      --spec-type draft-mtp,ngram-mod --spec-draft-n-max 4 --spec-draft-p-min 0.75
