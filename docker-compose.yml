@@ -29,7 +29,7 @@ services:
       --port 8000
       -m /models/Qwen3.8-Flash-Next-Uncensored-GGUF/Qwen3.8-Flash-Next-Uncensored-Q4_K_M-00001-of-00003.gguf
       -md /models/Qwen3.8-Flash-Next-Uncensored-GGUF/Qwen3.8-Flash-Next-Uncensored-MTP-draft.gguf
-      -ngl all -c 262144 -a gpt-4o-mini --flash-attn on --threads 16 --jinja
+      -ngl all -c 40900 -a gpt-4o-mini --flash-attn on --threads 16 --jinja
       -fit off --load-mode none --lazy-mode on-direct
       -ctv q8_0 -ctk q8_0 --ubatch-size 16384 --batch-size 16384
       --spec-type draft-mtp,ngram-mod --spec-draft-n-max 4 --spec-draft-p-min 0.75
