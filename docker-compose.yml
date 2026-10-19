@@ -14,7 +14,7 @@ x-common-settings: &common-settings
 services:
   main:
     <<: *common-settings
-    image: kyuz0/amd-strix-halo-toolboxes:rocm-10.0-strix-llama_20261002T205121
+    image: kyuz0/amd-strix-halo-toolboxes:rocm-10.0-strix-llama_20261018T184727
     ports:
       - "8000:8000"
     devices:
@@ -27,7 +27,8 @@ services:
       /usr/local/bin/llama-server
       --host 0.0.0.0
       --port 8000
-      -m /models/Qwen3.8-Flash-Next-Uncensored-GGUF/Qwen3.8-Flash-Next-Uncensored-Q4_K_M-00001-of-00003.gguf
+      -m /models/Qwen3.8-Flash-Next-Uncensored-GGUF/Qwen3.8-Flash-Next-Uncensored-IQ2_M-00001-of-00002.gguf
+      --mmproj /models/Qwen3.8-Flash-Next-Uncensored-GGUF/mmproj-Qwen3.8-Flash-Next-Uncensored-F16.gguf
       -md /models/Qwen3.8-Flash-Next-Uncensored-GGUF/Qwen3.8-Flash-Next-Uncensored-MTP-draft.gguf
       -ngl all -c 40900 -a gpt-4o-mini --flash-attn on --threads 16 --jinja
       -fit off --load-mode none --lazy-mode on-direct
